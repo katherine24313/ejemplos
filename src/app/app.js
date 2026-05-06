@@ -1,5 +1,4 @@
 import express from "express";
-import userRouter from "./routers/user.router.js";
 import morgan from "morgan";
 
 const app = express();

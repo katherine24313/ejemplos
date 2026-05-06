@@ -6,7 +6,7 @@ class UserStatus extends Model {};
 UserStatus.init({
     userStatus_id: {
         type: DataTypes.INTEGER,
-        autoIncrement: true
+        autoIncrement: true,
         primaryKey: true
     },
     userStatus_name: {
