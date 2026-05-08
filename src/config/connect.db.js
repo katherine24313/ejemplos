@@ -13,10 +13,10 @@ const sequelize = new Sequelize(
     }
 );
 
-async function testConnection()
+async function testConnection() { 
     try {
         await sequelize
-            .authenticate();
+            .authenticate()
             .then(() => {
                 console.log("DATABASE CONNECTED...");
         })
@@ -24,9 +24,9 @@ async function testConnection()
         console.log(err);
     });
     }  catch (error) {
-        console.error("Unable to connect to the database:", error);
+        console.error('Unable to connect to the database:', error);
     }
-    
+}    
 testConnection();
 export default sequelize;
 

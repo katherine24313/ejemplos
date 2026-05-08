@@ -7,9 +7,15 @@ import User from "../models/user.model.js";
 export const modelApp = function intModels(select) {
     if (select) {
         UserStatus.hasMany(User, { foreignKey: { name: "userStatus_FK", field: "userStatus_FK", allowall: true } });
-        User.belongsTo(UserStatus, { foreignKey: { name: "userStatus_FK", field: "userStatus_fk", allowall: true }, constraints: true, });
+        User.belongsTo(UserStatus, { 
+            foreignKey: { name: "userStatus_FK", field: "userStatus_fk", allowall: true }, 
+            constraints: true, 
+        });
         Role.hasMany(User, { foreignKey: { name: "role.FK", field: "role_FK", allowall: true } });
-        User.belongsTo(Role, { as: 'Current', foreignKey: { name: "role_FK", field: "role.fk", allowNull: true }, constraints: true,
+        User.belongsTo(Role, {
+             as: 'Current', 
+             foreignKey: { name: "role_FK", field: "role.fk", allowNull: true }, 
+             constraints: true,
     });
     sequelize.sync();
 }

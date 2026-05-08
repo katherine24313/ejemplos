@@ -1,24 +1,43 @@
+import { da } from "@faker-js/faker";
 import sequelize from "../config/connect.db.js";
 import {Model, DataTypes } from "sequelize";
 
+class User extends Model {}
 
-
-userStatus.init({
-    userStatus_id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
+    User.init({
+    user_id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true
     },
-    userStatus_name: {
+    user_user: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
     },
-    userStatus_description: {
+    user_password: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
+    },
+    userStatus_fk: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: "User_Statuses",
+            key: "userStatus_id"
+        }
+    },
+    role_fk: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: "Roles",
+            key: "role_id"
+        }
     }
-},{
-    sequelize, modelName: "User_Statuses"});
 
-export default userStatus;
+},{
+    sequelize, modelName: "User"
+});
+
+export default User;

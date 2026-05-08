@@ -12,13 +12,12 @@ UserStatus.init({
     userStatus_name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique
+        unique: true
     },
-    userSAtatus_description: {
+    userStatus_description: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: true,
     }   
 }, {
-    sequelize, modelName: "UserStatus"
-});
+    sequelize, modelName: "User_Statuses"});
 export default UserStatus;
