@@ -25,7 +25,7 @@ export const createUserStatus = async  (req, res) => {
     }
 };
 
-export const ShowUserStatus = async  (req, res) => {
+export const showUserStatus = async  (req, res) => {
     try {
         const users = await userStatusModel.findAll();
         res.status(200).json({
@@ -43,7 +43,7 @@ export const ShowUserStatus = async  (req, res) => {
     }
 };
 
- export const ShowIdUserStatus = async  (req, res) => {
+ export const showIdUserStatus = async  (req, res) => {
     try {
         const idstatus = req.params.id; 
         const user = await userStatusModel.findOne({
@@ -94,7 +94,7 @@ export const ShowUserStatus = async  (req, res) => {
     }
 }
 
-export const daleteUserStatus = async  (req, res) => {
+export const deleteUserStatus = async  (req, res) => {
     try {
         await userStatusModel.sync();
         const idstatus = req.params.id; 

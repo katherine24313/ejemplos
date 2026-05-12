@@ -47,7 +47,7 @@ export const showRole = async (req, res) => {
     }
 };
 
-export const showRole = async (req, res) => {
+export const showIdRole = async (req, res) => {
     try {
         await roleModel.sync();
         const showRole = await roleModel.findOne(

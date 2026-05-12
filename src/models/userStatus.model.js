@@ -1,4 +1,4 @@
-import sequelize from "../config/connect.db";
+import sequelize from "../config/connect.db.js";
 import { Model, DataTypes } from "sequelize";
 
 class UserStatus extends Model {};

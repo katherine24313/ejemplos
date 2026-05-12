@@ -1,5 +1,5 @@
-import sequelize from "../config/connect.db";
-import { Moderl, DataTypes } from "sequelize";
+import sequelize from "../config/connect.db.js";
+import { Model, DataTypes } from "sequelize";
 
 class Role extends Model {}
 

@@ -8,3 +8,6 @@ router.get("/userStatus", showUserStatus);
 router.get("/userStatus/:id", showIdUserStatus);
 router.put("/userStatus/:id", updateUserStatus);
 router.delete("/userStatus/:id", deleteUserStatus);
+
+
+export default router;

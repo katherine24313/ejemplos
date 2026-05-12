@@ -46,7 +46,7 @@ export const showUser = async  (req, res) => {
     }
 };
 
-export const shoeUserid = async  (req, res) => {
+export const showUserId = async  (req, res) => {
     try {
         const idUser = req.params.id;
         const user = await userModel.findOne({
