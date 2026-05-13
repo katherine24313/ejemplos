@@ -35,7 +35,7 @@ export const showRole = async (req, res) => {
             ok:true,
             status: 200,
             message: "Show Role :)",
-            data: showRoles,
+            data: showRole,
 
         });
     }
