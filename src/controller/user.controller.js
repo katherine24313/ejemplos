@@ -157,3 +157,41 @@ export const createUserfk = async (req, res) => {
         });
     }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+const Ismatch = await bcryptjs.compare(password, user.user_password);
+
+if (!IsNatch) {
+    return res.status(400).json({
+        error: "Invalid credentials",
+    });
+}
+
+const token = jwt.sign({email: user.user_user}, process.env.JWT_SECRET, {expiressIn: '1h'});
+
+res.status(200).json({
+    ok: true,
+    status: 200,
+    message: "Login Api :)",
+    id: user_id,
+    token: token
+});
+}
+catch (error) {
+    return res.status(500).json({
+        message: "Something went wrong in the request",
+        status: 500,
+    });
+}
+};
