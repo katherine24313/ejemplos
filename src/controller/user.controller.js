@@ -1,33 +1,42 @@
-import userModel from "../models/user.model.js";
+import bcrypt from "bcryptjs";
+import userModel from  "../models/user.model.js";
 import { faker } from "@faker-js/faker";
-
-export const createUser = async (req, res) => {
+import jwt from "jsonwebtoken";
+import { escape } from "sequelize/lib/sql-string";
+ 
+export const createUser = async  (req, res) => {
     try {
         await userModel.sync();
+        const salt =await bcrypt.genSalt(10);
         const dataUser = req.body;
+        const passwordHash = await bcryptjs.hash(dataUser.user_password, salt);
         const createUser = await userModel.create({
             user_user: dataUser.user_user,
-            user_password: dataUser.user_password,
+            user_password: dataUser.passwordHash,
             userStatus_fk: dataUser.userStatus_fk,
-            role_fk: dataUser.role,
+            role_fk: dataUser.role_fk,
 
         });
+        const token = jwt.sign({email: createUser.user_user},process.env.
+            JWK_SECRET, { expiresIn: '1h'}
+        );
         res.status(201).json({
             ok: true,
             status: 201,
             message: "Create User :)",
             id: createUser.user_id,
+            token: token
 
         });
     } catch (error) {
         return res.status(500).json({
             message: "Someting weng wrong in the request",
-            status: 500,
-        });
+            status: 500,     
+       });
     }
 };
 
-export const showUser = async (req, res) => {
+export const showUser = async  (req, res) => {
     try {
         await userModel.sync();
         const users = await userModel.findAll();
@@ -40,13 +49,13 @@ export const showUser = async (req, res) => {
         });
     } catch (error) {
         return res.status(500).json({
-            message: "Someting weng wrong in the request",
-            status: 500,
-        });
+            message: "Something went wrong in the request",
+            status: 500,     
+       });
     }
 };
 
-export const showUserId = async (req, res) => {
+export const showUserId = async  (req, res) => {
     try {
         const idUser = req.params.id;
         const user = await userModel.findOne({
@@ -59,14 +68,14 @@ export const showUserId = async (req, res) => {
             ok: true,
             status: 201,
             message: "show User id :)",
-            body: user,
+            body:  user,
 
         });
     } catch (error) {
         return res.status(500).json({
-            message: "Someting weng wrong in the request",
-            status: 500,
-        });
+            message: "Something went wrong in the request",
+            status: 500,     
+       });
     }
 };
 
@@ -82,11 +91,11 @@ export const updateUser = async (req, res) => {
                 user_password: dataUser.user_password,
                 userStatus_fk: dataUser.userStatus_fk,
                 role_fk: dataUser.role_fk,
-            }, {
-            where: {
-                user_id: idUser,
-            },
-        }
+            },{
+                where: {
+                    user_id: idUser,
+                },
+            }
         );
 
         res.status(200).json({
@@ -111,10 +120,10 @@ export const deleteUser = async (req, res) => {
         const idUser = req.params.id;
         const dataUser = req.body;
         const delateUser = await userModel.destroy({
-            where: {
-                user_id: idUser,
-            },
-        }
+           where: {
+                    user_id: idUser,
+                },
+            }
         );
 
         res.status(200).json({
@@ -135,12 +144,11 @@ export const deleteUser = async (req, res) => {
 export const createUserfk = async (req, res) => {
     try {
         await userModel.sync();
-        const createUsers = req.params.id;
-        const dataUser = await userModel.create({
-            user_user: faker.internet.email(),
-            user_password: faker.internet.password(),
-            userStatus_fk: 1,
-            role_fk: 1,
+        const createUser = await userModel.create({
+                user_user: faker.internet.email(),
+                user_password: faker.internet.password(),
+                userStatus_fk: 1,
+                role_fk: 1,
         });
 
         res.status(201).json({
@@ -158,62 +166,47 @@ export const createUserfk = async (req, res) => {
     }
 };
 
-export const loginUser = async (req, res) => {
-    try {
+export const loginUser = async (req, re) =>{
+    try{
         await userModel.sync();
+        const{email, password}= req.body 
 
-        const { email, password } = req.body;
-
-        console.log("=== LOGIN DEBUG ===");
-        console.log("Email recibido:", email);
-        console.log("Password recibida:", password);
-
-        if (!email || !password) {
+        if (!email || !password ){
             return res.status(400).json({
-                error: "Missing required fields: email and password",
-                status: 400,
+                error: "Misssing required fileds: email password"
             });
         }
-
-        const allUsers = await userModel.findAll();
-        console.log("Todos los usuarios en BD:", JSON.stringify(allUsers, null, 2));
-
         const user = await userModel.findOne({
-            where: {
-                user_user: email,
+            where:{
+                user_user:email, 
             },
         });
 
-        console.log("Usuario encontrado:", user);
-        console.log("Comparando:", email, "con los emails existentes");
-
-        if (!user) {
-            return res.status(404).json({
-                error: "User not found",
-                searched_email: email,
-                available_emails: allUsers.map(u => u.user_user)
-            });
-        }
-
-        const Ismatch = await bcryptjs.compare(password, user.user_password);
-
-        if (!IsNatch) {
+        if(!user){
             return res.status(400).json({
-                error: "Invalid credentials",
+                error: "User not found ", 
             });
         }
+        
 
-        const token = jwt.sign({ email: user.user_user }, process.env.JWT_SECRET, { expiressIn: '1h' });
+        const IsMatch = await bcryptjs.compare(password, user.user_password);
+
+        if (!IsMatch) {
+            return res.status (400).json({
+                error: "Invalid credetials",
+            });
+        }
+        const  token = jwt.sign({email:user.user_user},process.env.JWK_SECRET, {expiresIn:'1h'});
 
         res.status(200).json({
-            ok: true,
+            ok:true,
             status: 200,
-            message: "Login Api :)",
-            id: user_id,
-            token: token
+            message: "Login Api:)",
+            id: user.user_id,
+            token:token
         });
     }
-    catch (error) {
+    catch (error ) {
         return res.status(500).json({
             message: "Something went wrong in the request",
             status: 500,
@@ -221,4 +214,7 @@ export const loginUser = async (req, res) => {
     }
 };
 
+const UserController = {
+    createUser, showUser,showUserId, updateUser, deleteUser, loginUser
+};
 export default UserController;
