@@ -1,9 +1,10 @@
 import Joi from "@hapi/joi";
 
+import { updateUser } from "../controller/user.controller.js";
 export default{
-    createUse: Joi.object({
+    createUser: Joi.object({
         user_user: Joi.string().required().min(10),
-        user_password: Joi.string().required().min(7),
+        user_password:Joi.string().required().min,
         userStatus_fk: Joi.number().required(),
         role_fk: Joi.number().required(),
     }),
@@ -11,6 +12,6 @@ export default{
         user_user: Joi.string().min(10),
         user_password: Joi.string().min(7),
         userStatus_fk: Joi.number(),
-        role_fk: Joi.number(),   
+        role_fk: Joi.number(),
     }),
 }

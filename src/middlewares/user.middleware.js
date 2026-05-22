@@ -1,10 +1,11 @@
 export default (schema) => {
     return async (req, res, next) => {
-        try {
+        try{
             await schema.validateAsync(req.body);
             next();
-        }  catch (err) {
+        } catch (err){
             res.send(err.message);
         }
+
     }
 }
