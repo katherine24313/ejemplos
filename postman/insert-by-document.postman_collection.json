@@ -1,0 +1,79 @@
+{
+  "info": {
+    "name": "Insert por documento",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3001"
+    },
+    {
+      "key": "numero_documento",
+      "value": "123456"
+    },
+    {
+      "key": "body",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Insert por documento",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const documentNumber = Number(pm.variables.get('numero_documento'));",
+              "if (documentNumber % 2 === 0) {",
+              "  pm.variables.set('body', JSON.stringify({",
+              "    numero_documento: documentNumber,",
+              "    name: `Categoria para documento ${documentNumber}` ,",
+              "    description: 'Creada desde Postman',",
+              "    status: 'active'",
+              "  }));",
+              "} else {",
+              "  pm.variables.set('body', JSON.stringify({",
+              "    numero_documento: documentNumber,",
+              "    name: `Producto para documento ${documentNumber}` ,",
+              "    description: 'Creado desde Postman',",
+              "    price: 15000,",
+              "    stock: 5,",
+              "    category_id: 1,",
+              "    status: 'active'",
+              "  }));",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{body}}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/insert-by-document",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "insert-by-document"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
