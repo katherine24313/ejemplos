@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { modelApp } from "./config/models.app.js";
 
 dotenv.config({path: '../.env'});
-modelApp(false);
+modelApp(true);
 const port = process.env.SERVER_PORT || 3001;
 
 app.listen(port, () => {

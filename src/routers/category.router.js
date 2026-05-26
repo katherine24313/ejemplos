@@ -2,14 +2,14 @@
 // Define las rutas HTTP para el módulo de Categorías.
 // Cada ruta apunta a una función del controlador correspondiente.
 
-const { Router } = require("express");
-const {
-  getAllcategories,
-  getcategoryById,
-  createcategory,
-  updatecategory,
-  deletecategory
-} = require("../controller/category.controller");
+import { Router } from "express";
+import {
+  getAllCategories,
+  getCategoryById,
+  createCategory,
+  updateCategory,
+  deleteCategory
+} from "../controller/category.controller.js";
 
 const router = Router(); // Creamos una instancia del Router de Express
 
@@ -32,4 +32,4 @@ router.put("/:id", updateCategory);
 // DELETE /api/categories/:id     → Eliminar una categoría por ID
 router.delete("/:id", deleteCategory);
 
-module.exports = router;
+export default router;
