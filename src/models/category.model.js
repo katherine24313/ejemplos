@@ -25,6 +25,15 @@ const Category = sequelize.define(
       allowNull: true,
       comment: "Descripción detallada de la categoría"
     },
+    parent_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: "categories",
+        key: "id"
+      },
+      comment: "Referencia a la categoría padre para subcategorías"
+    },
     status: {
       type: DataTypes.ENUM("active", "inactive"),
       defaultValue: "active",
@@ -37,5 +46,15 @@ const Category = sequelize.define(
     underscored: true
   }
 );
+
+Category.belongsTo(Category, {
+  foreignKey: "parent_id",
+  as: "parent"
+});
+
+Category.hasMany(Category, {
+  foreignKey: "parent_id",
+  as: "subcategories"
+});
 
 export default Category;

@@ -5,6 +5,7 @@
 import { Router } from "express";
 import {
   getAllCategories,
+  getAllCategoryTree,
   getCategoryById,
   createCategory,
   updateCategory,
@@ -17,6 +18,8 @@ const router = Router(); // Creamos una instancia del Router de Express
 
 // GET    /api/categories         → Listar todas las categorías
 router.get("/", getAllCategories);
+// GET    /api/categories/tree    → Listar categorías como árbol con subcategorías
+router.get("/tree", getAllCategoryTree);
 
 // GET    /api/categories/:id     → Obtener una categoría por ID
 router.get("/:id", getCategoryById);

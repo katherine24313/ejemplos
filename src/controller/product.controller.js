@@ -1,6 +1,31 @@
 import Product from "../models/product.model.js";
 import Category from "../models/category.model.js";
 
+const collectCategoryDescendants = (categories, categoryId) => {
+  const childrenMap = new Map();
+  categories.forEach((category) => {
+    const parentId = category.parent_id;
+    if (!childrenMap.has(parentId)) {
+      childrenMap.set(parentId, []);
+    }
+    childrenMap.get(parentId).push(category.id);
+  });
+
+  const descendants = new Set();
+  const stack = [Number(categoryId)];
+
+  while (stack.length > 0) {
+    const currentId = stack.pop();
+    if (descendants.has(currentId)) continue;
+    descendants.add(currentId);
+
+    const children = childrenMap.get(currentId) || [];
+    stack.push(...children);
+  }
+
+  return Array.from(descendants);
+};
+
 export const getAllProducts = async (req, res) => {
   try {
     await Product.sync();
@@ -89,8 +114,11 @@ export const getProductsByCategory = async (req, res) => {
       });
     }
 
+    const categories = await Category.findAll({ attributes: ["id", "parent_id"] });
+    const categoryIds = collectCategoryDescendants(categories.map((categoryItem) => categoryItem.toJSON()), categoryId);
+
     const products = await Product.findAll({
-      where: { category_id: categoryId },
+      where: { category_id: categoryIds },
       include: [
         {
           model: Category,
@@ -103,7 +131,7 @@ export const getProductsByCategory = async (req, res) => {
     return res.status(200).json({
       ok: true,
       status: 200,
-      message: `Productos de la categoría "${category.name}"`,
+      message: `Productos de la categoría "${category.name}" y sus subcategorías`,
       data: products
     });
   } catch (error) {
